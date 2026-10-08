@@ -455,6 +455,144 @@
         padding: 55px 6%;
       }
     }
+    /* ================================
+   LOAN CALCULATOR
+================================ */
+
+.calculator-section {
+  padding: 70px 20px;
+  background: #f4f8fc;
+  text-align: center;
+}
+
+.calculator-section h2 {
+  color: #063b73;
+  font-size: 36px;
+  margin-bottom: 10px;
+}
+
+.calculator-section .calculator-subtitle {
+  color: #555;
+  margin-bottom: 35px;
+  font-size: 16px;
+}
+
+.calculator {
+  max-width: 650px;
+  margin: auto;
+  background: white;
+  padding: 35px;
+  border-radius: 15px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.10);
+}
+
+.calculator label {
+  display: block;
+  text-align: left;
+  font-weight: bold;
+  color: #063b73;
+  margin-bottom: 8px;
+}
+
+.calculator input {
+  width: 100%;
+  padding: 15px;
+  border: 2px solid #dce7f2;
+  border-radius: 8px;
+  font-size: 18px;
+  outline: none;
+  margin-bottom: 25px;
+}
+
+.calculator input:focus {
+  border-color: #0b8de3;
+}
+
+.calculate-btn {
+  width: 100%;
+  padding: 15px;
+  border: none;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #063b73, #0b8de3);
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.calculate-btn:hover {
+  transform: translateY(-2px);
+  opacity: 0.95;
+}
+
+.calculator-results {
+  margin-top: 30px;
+  display: none;
+}
+
+.result-box {
+  background: #f4f8fc;
+  border-left: 4px solid #0b8de3;
+  padding: 15px 18px;
+  margin-bottom: 12px;
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+}
+
+.result-box span:first-child {
+  color: #555;
+  text-align: left;
+}
+
+.result-box span:last-child {
+  color: #063b73;
+  font-weight: bold;
+  text-align: right;
+}
+
+.result-highlight {
+  background: linear-gradient(135deg, #063b73, #0b8de3);
+  border-left: none;
+}
+
+.result-highlight span {
+  color: white !important;
+}
+
+.repayment-note {
+  margin-top: 20px;
+  color: #666;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+  .calculator-section {
+    padding: 50px 15px;
+  }
+
+  .calculator-section h2 {
+    font-size: 28px;
+  }
+
+  .calculator {
+    padding: 25px 20px;
+  }
+
+  .result-box {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .result-box span:last-child {
+    text-align: left;
+  }
+}
   </style>
 </head>
 
@@ -540,7 +678,86 @@
     </div>
 
   </section>
+  </section>
 
+
+  <!-- LOAN CALCULATOR -->
+  <section class="calculator-section" id="calculator">
+
+    <h2>Loan Calculator</h2>
+
+    <p class="calculator-subtitle">
+      Calculate your loan amount, interest deduction and repayment details.
+    </p>
+
+    <div class="calculator">
+
+      <label for="loanAmount">Requested Loan Amount (Rs.)</label>
+
+      <input
+        type="number"
+        id="loanAmount"
+        placeholder="Enter loan amount"
+        min="1"
+        step="1000"
+      >
+
+      <button class="calculate-btn" onclick="calculateLoan()">
+        Calculate Loan
+      </button>
+
+      <div class="calculator-results" id="calculatorResults">
+
+        <div class="result-box">
+          <span>Requested Loan</span>
+          <span id="requestedLoan">Rs. 0.00</span>
+        </div>
+
+        <div class="result-box">
+          <span>Interest Rate</span>
+          <span>8% per month</span>
+        </div>
+
+        <div class="result-box">
+          <span>2-Month Interest</span>
+          <span id="interestAmount">Rs. 0.00</span>
+        </div>
+
+        <div class="result-box result-highlight">
+          <span>Amount You Receive</span>
+          <span id="amountReceived">Rs. 0.00</span>
+        </div>
+
+        <div class="result-box">
+          <span>Total Repayment</span>
+          <span id="totalRepayment">Rs. 0.00</span>
+        </div>
+
+        <div class="result-box">
+          <span>Repayment Period</span>
+          <span>50–60 Days</span>
+        </div>
+
+        <div class="result-box">
+          <span>Approx. Daily Repayment</span>
+          <span id="dailyRepayment">Rs. 0.00 – Rs. 0.00</span>
+        </div>
+
+        <p class="repayment-note">
+          Interest is deducted upfront. The customer receives the net loan
+          amount after the two-month interest deduction and repays the
+          requested loan amount over approximately 50–60 days.
+        </p>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- SERVICES -->
+  <section class="services" id="services">
 
   <!-- SERVICES -->
   <section class="services" id="services">
@@ -711,5 +928,62 @@ const observer = new IntersectionObserver(
 observer.observe(statsSection);
 
 </script>
+    </script>
+
+
+<script>
+function calculateLoan() {
+
+  const loanAmount = parseFloat(
+    document.getElementById("loanAmount").value
+  );
+
+  if (!loanAmount || loanAmount <= 0) {
+    alert("Please enter a valid loan amount.");
+    return;
+  }
+
+  // 8% per month × 2 months = 16%
+  const interestAmount = loanAmount * 0.16;
+
+  // Interest is deducted upfront
+  const amountReceived = loanAmount - interestAmount;
+
+  // Customer repays the original requested loan
+  const totalRepayment = loanAmount;
+
+  // Approximate repayment over 50–60 days
+  const dailyFor60Days = totalRepayment / 60;
+  const dailyFor50Days = totalRepayment / 50;
+
+  function formatMoney(amount) {
+    return "Rs. " + amount.toLocaleString("en-LK", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    });
+  }
+
+  document.getElementById("requestedLoan").textContent =
+    formatMoney(loanAmount);
+
+  document.getElementById("interestAmount").textContent =
+    formatMoney(interestAmount);
+
+  document.getElementById("amountReceived").textContent =
+    formatMoney(amountReceived);
+
+  document.getElementById("totalRepayment").textContent =
+    formatMoney(totalRepayment);
+
+  document.getElementById("dailyRepayment").textContent =
+    formatMoney(dailyFor60Days) + " – " + formatMoney(dailyFor50Days);
+
+  document.getElementById("calculatorResults").style.display = "block";
+}
+</script>
+
+
+</body>
+</html>
 </body>
 </html>
