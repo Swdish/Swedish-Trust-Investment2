@@ -7,6 +7,89 @@
   <title>Swedish Trust Investment | Micro Loans</title>
 
   <style>
+    /* ================================
+   ANIMATED STATISTICS
+================================ */
+
+.stats-section {
+  background: linear-gradient(135deg, #063b73, #052b54);
+  color: white;
+  padding: 65px 8%;
+  text-align: center;
+  overflow: hidden;
+}
+
+.stats-container {
+  max-width: 1100px;
+  margin: auto;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 25px;
+}
+
+.stat-box {
+  padding: 25px 15px;
+  position: relative;
+  transition: transform 0.3s ease;
+}
+
+.stat-box:hover {
+  transform: translateY(-8px);
+}
+
+.stat-icon {
+  font-size: 32px;
+  margin-bottom: 10px;
+}
+
+.stat-number {
+  font-size: 42px;
+  font-weight: bold;
+  color: #9edcff;
+  margin-bottom: 5px;
+  line-height: 1.2;
+}
+
+.stat-label {
+  font-size: 16px;
+  color: #dbeafe;
+  font-weight: 500;
+}
+
+.stat-box::after {
+  content: "";
+  position: absolute;
+  right: -13px;
+  top: 20%;
+  height: 60%;
+  width: 1px;
+  background: rgba(255,255,255,0.2);
+}
+
+.stat-box:last-child::after {
+  display: none;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+
+  .stats-container {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  .stat-number {
+    font-size: 32px;
+  }
+
+  .stat-label {
+    font-size: 14px;
+  }
+
+  .stat-box::after {
+    display: none;
+  }
+}
     .hero-banner-container {
   position: relative;
   width: 100%;
@@ -259,7 +342,89 @@
       font-size: 14px;
     }
 
-    @media (max-width: 768px) {
+    /* ANIMATED STATISTICS */
+
+.stats-section {
+  background: linear-gradient(135deg, #063b73, #052b54);
+  color: white;
+  padding: 65px 8%;
+  text-align: center;
+  overflow: hidden;
+}
+
+.stats-container {
+  max-width: 1100px;
+  margin: auto;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 25px;
+}
+
+.stat-box {
+  padding: 25px 15px;
+  position: relative;
+  transition: transform 0.3s ease;
+}
+
+.stat-box:hover {
+  transform: translateY(-8px);
+}
+
+.stat-icon {
+  font-size: 32px;
+  margin-bottom: 10px;
+}
+
+.stat-number {
+  font-size: 42px;
+  font-weight: bold;
+  color: #9edcff;
+  margin-bottom: 5px;
+  line-height: 1.2;
+}
+
+.stat-label {
+  font-size: 16px;
+  color: #dbeafe;
+  font-weight: 500;
+}
+
+.stat-box::after {
+  content: "";
+  position: absolute;
+  right: -13px;
+  top: 20%;
+  height: 60%;
+  width: 1px;
+  background: rgba(255,255,255,0.2);
+}
+
+.stat-box:last-child::after {
+  display: none;
+}
+
+/* Mobile */
+
+@media (max-width: 768px) {
+
+  .stats-container {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  .stat-number {
+    font-size: 32px;
+  }
+
+  .stat-label {
+    font-size: 14px;
+  }
+
+  .stat-box::after {
+    display: none;
+  }
+
+}
       header {
         flex-direction: column;
         gap: 12px;
@@ -341,6 +506,12 @@
     </div>
 
   </section>
+  </section>
+
+<!-- PASTE ANIMATED STATISTICS HERE -->
+
+<!-- SERVICES -->
+<section class="services" id="services">
 
 
   <!-- SERVICES -->
@@ -444,6 +615,73 @@
     </p>
 
   </footer>
+<script>
 
+const counters = document.querySelectorAll('.stat-number');
+
+const statsSection = document.querySelector('.stats-section');
+
+const startCounters = () => {
+
+  counters.forEach(counter => {
+
+    const target = Number(counter.getAttribute('data-target'));
+    const prefix = counter.getAttribute('data-prefix') || '';
+    const suffix = counter.getAttribute('data-suffix') || '';
+
+    const duration = 1800;
+    const startTime = performance.now();
+
+    function updateCounter(currentTime) {
+
+      const progress = Math.min(
+        (currentTime - startTime) / duration,
+        1
+      );
+
+      const easeOut = 1 - Math.pow(1 - progress, 3);
+
+      const current = Math.floor(target * easeOut);
+
+      counter.textContent =
+        prefix + current.toLocaleString() + suffix;
+
+      if (progress < 1) {
+        requestAnimationFrame(updateCounter);
+      }
+
+    }
+
+    requestAnimationFrame(updateCounter);
+
+  });
+
+};
+
+
+const observer = new IntersectionObserver(
+  (entries, observer) => {
+
+    entries.forEach(entry => {
+
+      if (entry.isIntersecting) {
+
+        startCounters();
+
+        observer.unobserve(entry.target);
+
+      }
+
+    });
+
+  },
+  {
+    threshold: 0.3
+  }
+);
+
+observer.observe(statsSection);
+
+</script>
 </body>
 </html>
